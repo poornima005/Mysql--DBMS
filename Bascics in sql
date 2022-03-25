@@ -1,0 +1,406 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 21
+Server version: 8.0.28 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> create database iips;
+Query OK, 1 row affected (1.91 sec)
+
+mysql> use database iips;
+ERROR 1049 (42000): Unknown database 'database'
+mysql> use iips;
+Database changed
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| college            |
+| iips               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| world              |
++--------------------+
+9 rows in set (0.27 sec)
+
+mysql> use college;
+Database changed
+mysql> desc student;
++---------+-------------+------+-----+--------------------+-------------------+
+| Field   | Type        | Null | Key | Default            | Extra             |
++---------+-------------+------+-----+--------------------+-------------------+
+| s_no    | int         | YES  |     | NULL               |                   |
+| roll_no | int         | NO   | PRI | NULL               |                   |
+| name    | varchar(50) | NO   |     | NULL               |                   |
+| age     | int         | YES  |     | NULL               |                   |
+| city    | varchar(30) | YES  |     | _utf8mb4\'Indore\' | DEFAULT_GENERATED |
++---------+-------------+------+-----+--------------------+-------------------+
+5 rows in set (0.15 sec)
+
+mysql> create table department(dep_id varchar(30) primary key,dep_name varchar(50),foreign key(stu_roll int) references student (roll_no));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'int) references student (roll_no))' at line 1
+mysql> create table department(dep_id varchar(30) primary key,dep_name varchar(50),foreign key(stu_roll) references student (roll_no));
+ERROR 1072 (42000): Key column 'stu_roll' doesn't exist in table
+mysql> create table department(dep_id varchar(30) primary key,dep_name varchar(50),stu_roll int,foreign key(stu_roll) references student (roll_no));
+Query OK, 0 rows affected (3.06 sec)
+
+mysql> ddesc department;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ddesc department' at line 1
+mysql> desc department;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| dep_id   | varchar(30) | NO   | PRI | NULL    |       |
+| dep_name | varchar(50) | YES  |     | NULL    |       |
+| stu_roll | int         | YES  | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> alter table department add depart_course varchar(30);
+Query OK, 0 rows affected (0.89 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc department;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| dep_id        | varchar(30) | NO   | PRI | NULL    |       |
+| dep_name      | varchar(50) | YES  |     | NULL    |       |
+| stu_roll      | int         | YES  | MUL | NULL    |       |
+| depart_course | varchar(30) | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+4 rows in set (0.07 sec)
+
+mysql> alter table department modify stu_roll int not null;
+Query OK, 0 rows affected (3.30 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc department;
++---------------+-------------+------+-----+---------+-------+
+| Field         | Type        | Null | Key | Default | Extra |
++---------------+-------------+------+-----+---------+-------+
+| dep_id        | varchar(30) | NO   | PRI | NULL    |       |
+| dep_name      | varchar(50) | YES  |     | NULL    |       |
+| stu_roll      | int         | NO   | MUL | NULL    |       |
+| depart_course | varchar(30) | YES  |     | NULL    |       |
++---------------+-------------+------+-----+---------+-------+
+4 rows in set (0.04 sec)
+
+mysql> alter table department drop column depart_course;
+Query OK, 0 rows affected (2.70 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc departmnet;
+ERROR 1146 (42S02): Table 'college.departmnet' doesn't exist
+mysql> show tables;
++-------------------+
+| Tables_in_college |
++-------------------+
+| department        |
+| student           |
++-------------------+
+2 rows in set (0.21 sec)
+
+mysql> desc department;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| dep_id   | varchar(30) | NO   | PRI | NULL    |       |
+| dep_name | varchar(50) | YES  |     | NULL    |       |
+| stu_roll | int         | NO   | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.01 sec)
+
+mysql> desc student;
++---------+-------------+------+-----+--------------------+-------------------+
+| Field   | Type        | Null | Key | Default            | Extra             |
++---------+-------------+------+-----+--------------------+-------------------+
+| s_no    | int         | YES  |     | NULL               |                   |
+| roll_no | int         | NO   | PRI | NULL               |                   |
+| name    | varchar(50) | NO   |     | NULL               |                   |
+| age     | int         | YES  |     | NULL               |                   |
+| city    | varchar(30) | YES  |     | _utf8mb4\'Indore\' | DEFAULT_GENERATED |
++---------+-------------+------+-----+--------------------+-------------------+
+5 rows in set (0.01 sec)
+
+mysql> insert into student(roll_no,name,city) values (IT-2K20-40,"Poornima","Dewas");
+ERROR 1054 (42S22): Unknown column 'IT' in 'field list'
+mysql> insert into student(roll_no,name,city) values (40,"Poornima","Dewas");
+Query OK, 1 row affected (0.15 sec)
+
+mysql> insert into student(roll_no,name,city) values (30,"Mayank","Indore"),(24,"Kanika","Dewas"),(25,"Kashish","Dewas"),(11,"Anshima","Dewas");
+Query OK, 4 rows affected (0.14 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> select * from student;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      11 | Anshima  | NULL | Dewas  |
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
++------+---------+----------+------+--------+
+5 rows in set (0.03 sec)
+
+mysql> delete from student where roll_no=11;
+Query OK, 1 row affected (0.20 sec)
+
+mysql> select * from student;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
++------+---------+----------+------+--------+
+4 rows in set (0.03 sec)
+
+mysql> delete from student where roll_no=24,25,30;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ',25,30' at line 1
+mysql> select * from department orderby desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1
+mysql> select * from department order by desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1
+mysql> select * from department order by dsc;
+ERROR 1054 (42S22): Unknown column 'dsc' in 'order clause'
+mysql> select name from department order by dsc;
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql> desc department;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| dep_id   | varchar(30) | NO   | PRI | NULL    |       |
+| dep_name | varchar(50) | YES  |     | NULL    |       |
+| stu_roll | int         | NO   | MUL | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.09 sec)
+
+mysql> select dep_name from department order by dsc;
+ERROR 1054 (42S22): Unknown column 'dsc' in 'order clause'
+mysql> select * from department order by dep_name dsc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dsc' at line 1
+mysql> select * from department order by dep_name asc;
+Empty set (0.03 sec)
+
+mysql> select * from student order by name asc;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
++------+---------+----------+------+--------+
+4 rows in set (0.03 sec)
+
+mysql> select * from student order by name dsc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'dsc' at line 1
+mysql> select * from student order by name desc;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      40 | Poornima | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      24 | Kanika   | NULL | Dewas  |
++------+---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select name from student order by desc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'desc' at line 1
+mysql> select name from student order by name desc;
++----------+
+| name     |
++----------+
+| Poornima |
+| Mayank   |
+| Kashish  |
+| Kanika   |
++----------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student order by city,name desc;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      40 | Poornima | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
++------+---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student order by city,name asc;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      40 | Poornima | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
++------+---------+----------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> alter table student modify s_no int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> alter table student modify column s_no int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> insert into student (1,78,"Rishabh",19,"Indore");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,78,"Rishabh",19,"Indore")' at line 1
+mysql> desc student;
++---------+-------------+------+-----+--------------------+-------------------+
+| Field   | Type        | Null | Key | Default            | Extra             |
++---------+-------------+------+-----+--------------------+-------------------+
+| s_no    | int         | YES  |     | NULL               |                   |
+| roll_no | int         | NO   | PRI | NULL               |                   |
+| name    | varchar(50) | NO   |     | NULL               |                   |
+| age     | int         | YES  |     | NULL               |                   |
+| city    | varchar(30) | YES  |     | _utf8mb4\'Indore\' | DEFAULT_GENERATED |
++---------+-------------+------+-----+--------------------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> insert into student (1,78,"Rishabh",19,"Indore");
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,78,"Rishabh",19,"Indore")' at line 1
+mysql> insert into student values (1,78,"Rishabh",19,"Indore");
+Query OK, 1 row affected (0.12 sec)
+
+mysql> alter table student modify s_no int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> select * from student;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
+|    1 |      78 | Rishabh  |   19 | Indore |
++------+---------+----------+------+--------+
+5 rows in set (0.03 sec)
+
+mysql> alter table student modify s_no int auto_increment;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> select top 2 * from student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '2 * from student' at line 1
+mysql> select * from student limit 2;
++------+---------+---------+------+-------+
+| s_no | roll_no | name    | age  | city  |
++------+---------+---------+------+-------+
+| NULL |      24 | Kanika  | NULL | Dewas |
+| NULL |      25 | Kashish | NULL | Dewas |
++------+---------+---------+------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student where roll_no=40 limit 2;
++------+---------+----------+------+-------+
+| s_no | roll_no | name     | age  | city  |
++------+---------+----------+------+-------+
+| NULL |      40 | Poornima | NULL | Dewas |
++------+---------+----------+------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from student where roll_no=70 limit 2;
+Empty set (0.00 sec)
+
+mysql> select max(roll_no) from student;
++--------------+
+| max(roll_no) |
++--------------+
+|           78 |
++--------------+
+1 row in set (0.04 sec)
+
+mysql> select max(roll_no) from student where name like=Ka%;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=Ka%' at line 1
+mysql> select *,max(roll_no) from student;
++------+---------+--------+------+-------+--------------+
+| s_no | roll_no | name   | age  | city  | max(roll_no) |
++------+---------+--------+------+-------+--------------+
+| NULL |      24 | Kanika | NULL | Dewas |           78 |
++------+---------+--------+------+-------+--------------+
+1 row in set (0.00 sec)
+
+mysql> select * from studentl;
+ERROR 1146 (42S02): Table 'college.studentl' doesn't exist
+mysql> select * from student;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
+|    1 |      78 | Rishabh  |   19 | Indore |
++------+---------+----------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select name as "ye_hai_naam" from student;
++-------------+
+| ye_hai_naam |
++-------------+
+| Kanika      |
+| Kashish     |
+| Mayank      |
+| Poornima    |
+| Rishabh     |
++-------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student;
++------+---------+----------+------+--------+
+| s_no | roll_no | name     | age  | city   |
++------+---------+----------+------+--------+
+| NULL |      24 | Kanika   | NULL | Dewas  |
+| NULL |      25 | Kashish  | NULL | Dewas  |
+| NULL |      30 | Mayank   | NULL | Indore |
+| NULL |      40 | Poornima | NULL | Dewas  |
+|    1 |      78 | Rishabh  |   19 | Indore |
++------+---------+----------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student where max(roll_no);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select * from student where roll_no=max(roll_no);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select * where max(roll_no) from student;;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from student' at line 1
+ERROR:
+No query specified
+
+mysql> select * from student where max(roll_no);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select * from student where roll_no=max;
+ERROR 1054 (42S22): Unknown column 'max' in 'where clause'
+mysql> select * from student where roll_no=max(roll_no);
+ERROR 1111 (HY000): Invalid use of group function
+mysql> select * where max(roll_no) from student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from student' at line 1
+mysql> select * where roll_no=max(roll_no) from student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from student' at line 1
+mysql> select * where roll_no=max(roll_no) from student;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'from student' at line 1
+mysql> select * where roll_no=(select max(rollno) from student);
+ERROR 1096 (HY000): No tables used
+mysql> select * from student where roll_no=(select max(roll_no) from student);
++------+---------+---------+------+--------+
+| s_no | roll_no | name    | age  | city   |
++------+---------+---------+------+--------+
+|    1 |      78 | Rishabh |   19 | Indore |
++------+---------+---------+------+--------+
+1 row in set (0.00 sec)
+
+mysql>
