@@ -1,0 +1,630 @@
+Enter password: *******
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 14
+Server version: 8.0.28 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| batch1ass          |
+| batch1ass2         |
+| college            |
+| employee           |
+| iips               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.05 sec)
+
+mysql> use employee;
+Database changed
+mysql> select * from product;
+ERROR 1146 (42S02): Table 'employee.product' doesn't exist
+mysql> use vatch1ass2;
+ERROR 1049 (42000): Unknown database 'vatch1ass2'
+mysql> use batch1ass2;
+Database changed
+mysql> select * from product;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   20.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   16.40000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> savepoint s1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update set sell_price = 21.43000 from product where product_id =p001;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set sell_price = 21.43000 from product where product_id =p001' at line 1
+mysql> update set sell_price = 21.43000 from product where product_id ='p001';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'set sell_price = 21.43000 from product where product_id ='p001'' at line 1
+mysql> update product set sell_price = 21.43000  where product_id ='p001';
+Query OK, 1 row affected (0.10 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> rollback to s1;
+ERROR 1305 (42000): SAVEPOINT s1 does not exist
+mysql> begin;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from product;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   21.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   16.40000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> update product set sell_price = 18.0000 where product_id = 'p002';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> savepoint s2;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update product set sell_price = 19.0000 where product_id = 'p002';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> rollback to s2;
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> select * from product;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   21.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   18.00000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.04 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| batch1ass          |
+| batch1ass2         |
+| college            |
+| employee           |
+| iips               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.04 sec)
+
+mysql> iips;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'iips' at line 1
+mysql> use iips;
+Database changed
+mysql> shoe tablews;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'shoe tablews' at line 1
+mysql> shoe tables;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'shoe tables' at line 1
+mysql> show tables;
+Empty set (0.04 sec)
+
+mysql> create table kuch_bi(Kuchbi1 int,kuchbi2 varchar(20),kuchbi3 int);
+Query OK, 0 rows affected (2.11 sec)
+
+mysql> insert into kuch_bi values(1,'Anshima_pgl',2),(2,'Kashish_topper',3);
+Query OK, 2 rows affected (0.18 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> select * from kuch_bi;
++---------+----------------+---------+
+| Kuchbi1 | kuchbi2        | kuchbi3 |
++---------+----------------+---------+
+|       1 | Anshima_pgl    |       2 |
+|       2 | Kashish_topper |       3 |
++---------+----------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> update kuch_bi set kuchbi2='Anshima_to_kabse_pgl_h' where kuchbi1=1;
+ERROR 1406 (22001): Data too long for column 'kuchbi2' at row 1
+mysql> update kuch_bi set kuchbi2='Anshima_pgl' where kuchbi1=1;
+Query OK, 0 rows affected (0.02 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from kuch_bi;
++---------+----------------+---------+
+| Kuchbi1 | kuchbi2        | kuchbi3 |
++---------+----------------+---------+
+|       1 | Anshima_pgl    |       2 |
+|       2 | Kashish_topper |       3 |
++---------+----------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> update kuch_bi set kuchbi2='Anshima_pgl' where kuchbi1=1;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> update kuch_bi set kuchbi2='Anshima_dhor' where kuchbi1=1;
+Query OK, 1 row affected (0.08 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> select * from kuch_bi;
++---------+----------------+---------+
+| Kuchbi1 | kuchbi2        | kuchbi3 |
++---------+----------------+---------+
+|       1 | Anshima_dhor   |       2 |
+|       2 | Kashish_topper |       3 |
++---------+----------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from kuch_bi;
++---------+----------------+---------+
+| Kuchbi1 | kuchbi2        | kuchbi3 |
++---------+----------------+---------+
+|       1 | Anshima_dhor   |       2 |
+|       2 | Kashish_topper |       3 |
++---------+----------------+---------+
+2 rows in set (0.00 sec)
+
+mysql> select * from product;
+ERROR 1146 (42S02): Table 'iips.product' doesn't exist
+mysql> use batch1ass;
+Database changed
+mysql> select * from product;
+ERROR 1146 (42S02): Table 'batch1ass.product' doesn't exist
+mysql> use batch2ass;
+ERROR 1049 (42000): Unknown database 'batch2ass'
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| batch1ass          |
+| batch1ass2         |
+| college            |
+| employee           |
+| iips               |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| student            |
+| sys                |
+| world              |
++--------------------+
+12 rows in set (0.03 sec)
+
+mysql> use batch1ass2;
+Database changed
+mysql> select * from product;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   21.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   18.00000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.02 sec)
+
+mysql> select * from order_details;
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+| sales_order_no | sales_order_date | client_id | salesman_id | bill_payby_party | delivery_date | product_rate | tot_quantity_order | cancel_date |
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+| on01001        | 2008-08-01       | cn1001    | s001        | yes              | 2008-08-20    |   2220.40000 |                 50 | 0000-00-00  |
+| on01002        | 2008-08-12       | cn1004    | s001        | yes              | 2008-08-23    |   2220.40000 |                 15 | 0000-00-00  |
+| on01003        | 2008-08-01       | cn1005    | s003        | yes              | 2008-08-26    |   2220.40000 |                 10 | 0000-00-00  |
+| on01004        | 2008-08-13       | cn1004    | s001        | yes              | 2008-08-20    |   2220.40000 |                 15 | 0000-00-00  |
+| on01005        | 2008-08-14       | cn1002    | s002        | no               | 2008-08-30    |   2220.40000 |                 52 | 0000-00-00  |
+| on01006        | 2008-08-15       | cn1001    | s001        | yes              | 2008-08-31    |   2220.40000 |                 53 | 0000-00-00  |
+| on01007        | 2008-01-16       | cn1003    | s004        | yes              | 2008-08-28    |   2220.40000 |                 54 | 0000-00-00  |
+| on01008        | 2008-02-01       | cn1004    | s003        | no               | 2000-08-28    |   8220.40000 |                 54 | 2008-03-18  |
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+8 rows in set (0.04 sec)
+
+mysql> select client_id from order_details union select product_id from product;p
++-----------+
+| client_id |
++-----------+
+| cn1001    |
+| cn1004    |
+| cn1005    |
+| cn1002    |
+| cn1003    |
+| p001      |
+| p002      |
+| p003      |
+| p004      |
+| p005      |
+| p006      |
+| p008      |
++-----------+
+12 rows in set (0.03 sec)
+
+    -> select client_id from order_details union select product_id from product;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'p
+select client_id from order_details union select product_id from product' at line 1
+mysql> select client_id from order_details union select product_id from product;
++-----------+
+| client_id |
++-----------+
+| cn1001    |
+| cn1004    |
+| cn1005    |
+| cn1002    |
+| cn1003    |
+| p001      |
+| p002      |
+| p003      |
+| p004      |
+| p005      |
+| p006      |
+| p008      |
++-----------+
+12 rows in set (0.00 sec)
+
+mysql> select client_id as table from order_details union select product_id from product;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table from order_details union select product_id from product' at line 1
+mysql> select client_id as 'table' from order_details union select product_id from product;
++--------+
+| table  |
++--------+
+| cn1001 |
+| cn1004 |
+| cn1005 |
+| cn1002 |
+| cn1003 |
+| p001   |
+| p002   |
+| p003   |
+| p004   |
+| p005   |
+| p006   |
+| p008   |
++--------+
+12 rows in set (0.00 sec)
+
+mysql> select client_id as 'table' from order_details order by asc union select product_id from product order by asc;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'asc union select product_id from product order by asc' at line 1
+mysql> select client_id as 'table' from order_details order by union select product_id from product order by;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'union select product_id from product order by' at line 1
+mysql> select client_id as 'table' from order_details order by union select product_id from product order by;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'union select product_id from product order by' at line 1
+mysql> create table table1 as select * from product;
+Query OK, 7 rows affected (1.86 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from table1;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   21.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   18.00000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> insert table table1 select * from client;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table table1 select * from client' at line 1
+mysql> drop table table1;
+Query OK, 0 rows affected (1.69 sec)
+
+mysql> insert into table1 select * from client;
+ERROR 1146 (42S02): Table 'batch1ass2.table1' doesn't exist
+mysql> create table table1;
+ERROR 4028 (HY000): A table must have at least one visible column.
+mysql> create table table1(me_hu varchar(10));
+Query OK, 0 rows affected (0.89 sec)
+
+mysql> truncate table table1;
+Query OK, 0 rows affected (0.94 sec)
+
+mysql> insert into table1 select product_name,manufacturer_name from product;
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> insert into table1 select product_name from product;
+ERROR 1265 (01000): Data truncated for column 'me_hu' at row 3
+mysql> desc table1;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| me_hu | varchar(10) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+1 row in set (0.12 sec)
+
+mysql> insert into table1 select me_hu from product;
+ERROR 1054 (42S22): Unknown column 'me_hu' in 'field list'
+mysql> drop table1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table1' at line 1
+mysql> drop table table1;
+Query OK, 0 rows affected (1.31 sec)
+
+mysql> create table1 as select product_id,product_name from product;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'table1 as select product_id,product_name from product' at line 1
+mysql> create table table1 as select product_id,product_name from product;
+Query OK, 7 rows affected (1.00 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> desc table1;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| product_id   | varchar(20) | NO   |     | NULL    |       |
+| product_name | varchar(30) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.08 sec)
+
+mysql> select * from table1;
++------------+---------------+
+| product_id | product_name  |
++------------+---------------+
+| p001       | lux_soap      |
+| p002       | copy          |
+| p003       | marry_biscuit |
+| p004       | mitsubisi_pen |
+| p005       | learn_books   |
+| p006       | tata_steel    |
+| p008       | dvd_writer    |
++------------+---------------+
+7 rows in set (0.00 sec)
+
+mysql> truncate table table1'
+    '> :/c^
+    '> \c
+    '> :\c
+    '> :\c^
+    '> :\c;
+    '> :^/c
+    '> ;
+    '> :'/c
+    -> /g
+    -> \g
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''
+:/c^
+\c
+:\c
+:\c^
+:\c;
+:^/c
+;
+:'/c
+/g' at line 1
+mysql> truncate table table1;
+Query OK, 0 rows affected (1.44 sec)
+
+mysql> select * from table1;
+Empty set (0.13 sec)
+
+mysql> desc table1;
++--------------+-------------+------+-----+---------+-------+
+| Field        | Type        | Null | Key | Default | Extra |
++--------------+-------------+------+-----+---------+-------+
+| product_id   | varchar(20) | NO   |     | NULL    |       |
+| product_name | varchar(30) | YES  |     | NULL    |       |
++--------------+-------------+------+-----+---------+-------+
+2 rows in set (0.03 sec)
+
+mysql> insert into table1 select product_id , Product_name from product;
+Query OK, 7 rows affected (0.13 sec)
+Records: 7  Duplicates: 0  Warnings: 0
+
+mysql> select * from table1;
++------------+---------------+
+| product_id | product_name  |
++------------+---------------+
+| p001       | lux_soap      |
+| p002       | copy          |
+| p003       | marry_biscuit |
+| p004       | mitsubisi_pen |
+| p005       | learn_books   |
+| p006       | tata_steel    |
+| p008       | dvd_writer    |
++------------+---------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from product;
++------------+---------------+-------------------+--------------+------------+---------------------+
+| product_id | product_name  | manufacturer_name | product_rate | sell_price | product_description |
++------------+---------------+-------------------+--------------+------------+---------------------+
+| p001       | lux_soap      | lux_international |     15.67000 |   21.43000 | soap                |
+| p002       | copy          | times_copy_org    |     14.80000 |   18.00000 | copy                |
+| p003       | marry_biscuit | marigold_org      |   2218.80000 | 2220.40000 | biscuit             |
+| p004       | mitsubisi_pen | pen_international |   2015.67000 | 2120.43000 | pen                 |
+| p005       | learn_books   | book_world        |   5104.80000 | 5116.40000 | book                |
+| p006       | tata_steel    | tata_org          |   5118.80000 | 5120.40000 | HDD1034             |
+| p008       | dvd_writer    | frontec_org       |   5118.80000 | 5120.40000 | DVDRW               |
++------------+---------------+-------------------+--------------+------------+---------------------+
+7 rows in set (0.00 sec)
+
+mysql> select * from order_details;
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+| sales_order_no | sales_order_date | client_id | salesman_id | bill_payby_party | delivery_date | product_rate | tot_quantity_order | cancel_date |
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+| on01001        | 2008-08-01       | cn1001    | s001        | yes              | 2008-08-20    |   2220.40000 |                 50 | 0000-00-00  |
+| on01002        | 2008-08-12       | cn1004    | s001        | yes              | 2008-08-23    |   2220.40000 |                 15 | 0000-00-00  |
+| on01003        | 2008-08-01       | cn1005    | s003        | yes              | 2008-08-26    |   2220.40000 |                 10 | 0000-00-00  |
+| on01004        | 2008-08-13       | cn1004    | s001        | yes              | 2008-08-20    |   2220.40000 |                 15 | 0000-00-00  |
+| on01005        | 2008-08-14       | cn1002    | s002        | no               | 2008-08-30    |   2220.40000 |                 52 | 0000-00-00  |
+| on01006        | 2008-08-15       | cn1001    | s001        | yes              | 2008-08-31    |   2220.40000 |                 53 | 0000-00-00  |
+| on01007        | 2008-01-16       | cn1003    | s004        | yes              | 2008-08-28    |   2220.40000 |                 54 | 0000-00-00  |
+| on01008        | 2008-02-01       | cn1004    | s003        | no               | 2000-08-28    |   8220.40000 |                 54 | 2008-03-18  |
++----------------+------------------+-----------+-------------+------------------+---------------+--------------+--------------------+-------------+
+8 rows in set (0.01 sec)
+
+mysql> select * from client;
++-----------+---------------+------------+----------+--------+---------+------------+
+| client_id | client_name   | address    | city     | pin    | state   | bal_due    |
++-----------+---------------+------------+----------+--------+---------+------------+
+| cn01001   | alak roy      | b.d.para   | amarpur  | 799101 | tripura |  390.90000 |
+| cn01002   | suman roy     | puk para   | agartala | 799102 | tripura | 2390.90000 |
+| cn01003   | moytree nayak | pachmile   | tezpur   | 799152 | assam   | 9990.90000 |
+| cn01004   | priya das     | chora para | kamalpur | 799301 | tripura | 1390.90000 |
++-----------+---------------+------------+----------+--------+---------+------------+
+4 rows in set (0.04 sec)
+
+mysql> select client_name from client where exist (select salesman_id from order_details where order_details.client_id = client.client_id );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select salesman_id from order_details where order_details.client_id = client.cli' at line 1
+mysql> select client_name from client where exists (select salesman_id from order_details where order_details.client_id = client.client_id );
+Empty set (0.04 sec)
+
+mysql> select client_name from client where exists (select salesman_id from order_details where order_details.client_id = client.client_id and tot_quantity_order=15);
+Empty set (0.00 sec)
+
+mysql> select client_name from client where exist (select salesman_id from order_details where order_details.client_id = client.client_id );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select salesman_id from order_details where order_details.client_id = client.cli' at line 1
+mysql> select client_name from client where exists (select salesman_id from order_details where order_details.client_id = client.client_id );
+Empty set (0.00 sec)
+
+mysql> select salesman_id from salesman where exist (select client_id from order_details where order_details.salesman_id = salesman.salesman_id );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select client_id from order_details where order_details.salesman_id = salesman.s' at line 1
+mysql> select salesman_id from salesman where exists (select client_id from order_details where order_details.salesman_id = salesman.salesman_id );
++-------------+
+| salesman_id |
++-------------+
+| s001        |
+| s002        |
+| s003        |
+| s004        |
++-------------+
+4 rows in set (0.01 sec)
+
+mysql> select * from salesman;
++-------------+---------------+-------------+------------+--------+-----------+--------+
+| salesman_id | salesman_name | address     | city       | pin    | state     | salary |
++-------------+---------------+-------------+------------+--------+-----------+--------+
+| s001        | rohan das     | nappam      | tezpur     |  79970 | assam     |   8000 |
+| s002        | rohan das     | nappam      | tezpur     | 799170 | assam     |   8000 |
+| s003        | smita das     | nirjuli     | itanagar   | 799710 | arunachal |   9000 |
+| s004        | kabir bora    | nappam      | tezpur     | 799703 | assam     |   8500 |
+| s005        | neha singh    | borbota     | sonitpur   | 795970 | assam     |   9600 |
+| s006        | priya agrawal | gandhi road | 32 distric | 799750 | delhi     |   9900 |
+| s007        | ashok paul    | filmcity    | munnabari  | 799740 | mumbai    |   8940 |
++-------------+---------------+-------------+------------+--------+-----------+--------+
+7 rows in set (0.00 sec)
+
+mysql> select salesman_name from salesman where exists (select client_id from order_details where order_details.salesman_id = salesman.salesman_id );
++---------------+
+| salesman_name |
++---------------+
+| rohan das     |
+| rohan das     |
+| smita das     |
+| kabir bora    |
++---------------+
+4 rows in set (0.00 sec)
+
+mysql> select salesman_name from salesman where exists (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
++---------------+
+| salesman_name |
++---------------+
+| rohan das     |
++---------------+
+1 row in set (0.00 sec)
+
+mysql> select salesman_name from salesman where not exists (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
++---------------+
+| salesman_name |
++---------------+
+| rohan das     |
+| smita das     |
+| kabir bora    |
+| neha singh    |
+| priya agrawal |
+| ashok paul    |
++---------------+
+6 rows in set (0.00 sec)
+
+mysql> select salesman_name from salesman where in (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'in (select client_id from order_details where order_details.salesman_id = salesm' at line 1
+mysql> select salesman_name from salesman where some (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select client_id from order_details where order_details.salesman_id = salesman.' at line 1
+mysql> select salesman_name from salesman where some (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(select client_id from order_details where order_details.salesman_id = salesman.' at line 1
+mysql> select salesman_name from salesman where sakesman_id =some (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1054 (42S22): Unknown column 'sakesman_id' in 'IN/ALL/ANY subquery'
+mysql> select salesman_name from salesman where client_id =some (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1054 (42S22): Unknown column 'client_id' in 'IN/ALL/ANY subquery'
+mysql> select salesman_name from salesman where client_id =anhy (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'select client_id from order_details where order_details.salesman_id = salesman.s' at line 1
+mysql> select salesman_name from salesman where client_id =any (select client_id from order_details where order_details.salesman_id = salesman.salesman_id and tot_quantity_order=15);
+ERROR 1054 (42S22): Unknown column 'client_id' in 'IN/ALL/ANY subquery'
+mysql> select salesman_name from salesman where client_id =any(select client_id from order_details where order_details.salesman_id = salesman.salesman_id and order_details.tot_quantity_order=15);
+ERROR 1054 (42S22): Unknown column 'client_id' in 'IN/ALL/ANY subquery'
+mysql> select salesman_name from salesman where salesman_id =any(select client_id from order_details where order_details.salesman_id = salesman.salesman_id and order_details.tot_quantity_order=15);
+Empty set (0.00 sec)
+
+mysql> select salesman_name from salesman where salesman_id =some(select client_id from order_details where order_details.salesman_id = salesman.salesman_id and order_details.tot_quantity_order=15);
+Empty set (0.00 sec)
+
+mysql> select salesman_name from salesman where salesman_id =all(select client_id from order_details where order_details.salesman_id = salesman.salesman_id and order_details.tot_quantity_order=15);
++---------------+
+| salesman_name |
++---------------+
+| rohan das     |
+| smita das     |
+| kabir bora    |
+| neha singh    |
+| priya agrawal |
+| ashok paul    |
++---------------+
+6 rows in set (0.04 sec)
+
+mysql> /*poorvi*/
+mysql> --poorvi
+    -> --poorvi--
+    -> ^C
+mysql> --poorvi--
+    -> -poorvi-
+    -> ^C
+mysql>
+mysql> -poorvi-
+    -> ^C
+mysql>
